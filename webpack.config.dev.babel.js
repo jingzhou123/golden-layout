@@ -4,10 +4,6 @@ import path from 'path'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
-import postcssNext from 'postcss-cssnext'
-import postcssImport from 'postcss-import'
-import postcssExtend from 'postcss-extend'
-import postcssReporter from 'postcss-reporter'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
 import WebpackCompileHooksPlugin from './webpack_plugins/WebpackCompileHooksPlugin.js'
@@ -28,17 +24,6 @@ var jsPath = path.join( basePath, process.env.ES6 ?  path.join('src', 'js_es6') 
 var jsDir = path.join('dist', 'js')
 var cssDir = path.join('dist', 'css')
 var distFile = 'goldenlayout.js' // for Prototype build only (ES6 is managed by webpack config)
-
-const postcssProcessors = [
-  postcssImport,
-  postcssExtend,
-  postcssNext,
-  postcssReporter({ clearReportedMessages: true }),
-]
-
-const scssProcessors = [
-  postcssReporter({ clearReportedMessages: true }),
-]
 
 
 module.exports = (env) => {
@@ -128,40 +113,6 @@ module.exports = (env) => {
             use: [
               {
                 loader: 'css-loader',
-                options: {
-                  sourceMap: true,
-                },
-              },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true,
-                  plugins: postcssProcessors,
-                },
-              },
-            ],
-            publicPath: '../',
-          }),
-        },
-        {
-          test: /\.scss$/,
-          use: extractStyles.extract({
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  sourceMap: true,
-                },
-              },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true,
-                  plugins: scssProcessors,
-                },
-              },
-              {
-                loader: "sass-loader",
                 options: {
                   sourceMap: true,
                 },
