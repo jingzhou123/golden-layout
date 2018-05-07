@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
     // 
     // set layout type
     // 
-    var layout = 'standard'
+    var layout = 'ide'
 
     // 
     // init
@@ -62,6 +62,9 @@ window.addEventListener('load', () => {
       case 'tab-dropdown':
         config = createTabDropdownConfig()
         break
+      case 'ide':
+        config = createIDEConfig()
+        break
       default:
         config = createStandardConfig()
         break
@@ -72,6 +75,51 @@ window.addEventListener('load', () => {
     myLayout.registerComponent( 'html', function( container, state ) {} )
 
     myLayout.init()
+
+    function createIDEConfig() {
+      return {
+        content: [{
+          type: 'row',
+          content: [{
+            type: 'component',
+            title: 'Tree',
+            header: {
+              show: false
+            },
+            componentName: 'html'
+          }, {
+            type: 'column',
+            content: [{
+              type: 'component',
+              title: 'Workspace',
+              componentName: 'html',
+            }, {
+              type: 'component',
+              title: 'Console',
+              componentName: 'html',
+              header: {
+                show: false
+              }
+            }]
+          }, {
+            type: 'stack',
+            title: 'RightPanel',
+            header: {
+              show: false
+            },
+            content: [{
+              type: 'component',
+              title: 'property',
+              componentName: 'html',
+            }, {
+              type: 'component',
+              title: 'error',
+              componentName: 'html',
+            }]
+          }]
+        }]
+      }
+    }
 
 
     function createMiniConfig(){
