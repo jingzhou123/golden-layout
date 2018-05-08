@@ -16,6 +16,7 @@ const extractLESS = new ExtractTextPlugin({filename: path.join('css', 'goldenlay
 const extractStyles = new ExtractTextPlugin({ filename: path.join('css', 'goldenlayout.css') })
 
 console.log('ES6?', process.env.ES6)
+console.log('DEV?', process.env.DEV)
 
 var compileHooksIsRunning = false
 var data = { files: [], directories: [] }
@@ -43,7 +44,7 @@ module.exports = (env) => {
 
     entry: {
       // non-ES6 (Prototype/concat build) needs a dummy name or it will overwrite
-      [process.env.ES6 ? 'goldenlayout' : 'dummy']: env.dev ? ('.' + path.sep + 'app.js') : ('.' + path.sep + 'index.js'),
+      [process.env.ES6 ? 'goldenlayout' : 'dummy']: process.env.DEV ? ('.' + path.sep + 'app.js') : ('.' + path.sep + 'index.js'),
     },
 
 
@@ -55,13 +56,13 @@ module.exports = (env) => {
     output: Object.assign({
       path: path.resolve(__dirname, 'dist'),
       filename: path.join('js', '[name].js'),
-    }, process.env.dev ? {} : {
+    }, process.env.DEV ? {} : {
       library: 'GoldenLayout',
       libraryTarget: 'umd', // should be umd for npm-package
       umdNamedDefine: true      
     }),
 
-    watch: env.dev || env.build_watch,
+    watch: !!process.env.DEV || !!env.build_watch,
 
     devtool: 'eval',
 
@@ -164,7 +165,7 @@ module.exports = (env) => {
 
         new CopyWebpackPlugin(process.env.ES6 ? [] : [
               { from: path.join('..', 'lib', 'jquery.js'), to: 'lib' + path.sep },
-          ].concat(env.dev ? [
+          ].concat(process.env.DEV ? [
               { from: 'my_traces.js' },
               { from: path.join('..', 'lib', 'tracing.js', 'tracing.js'), to: 'lib' + path.sep },
           ]: []), {
@@ -274,14 +275,14 @@ module.exports = (env) => {
         // failOnError: false,
         // quiet: true,
       // }),
-    ].concat(env.dev ? [
+    ].concat(process.env.DEV ? [
 
       new HtmlWebpackPlugin({
         template: process.env.ES6 ? 'index_es6.html' : 'index_prototype.html',
         support_library: process.env.JQUERY ? path.join('lib', 'jquery.js'): path.join('lib', 'zepto.js')
       }),
 
-      new MinifyPlugin,
+      // new MinifyPlugin,
 
     ] : [])),
   }
