@@ -90,9 +90,17 @@ window.addEventListener('load', () => {
           }, {
             type: 'column',
             content: [{
-              type: 'component',
+              type: 'stack',
               title: 'Workspace',
-              componentName: 'html',
+              content: [{
+                type: 'component',
+                title: 'tab1',
+                componentName: 'html',
+              }, {
+                type: 'component',
+                title: 'tab1',
+                componentName: 'html',
+              }]
             }, {
               type: 'component',
               title: 'Console',
