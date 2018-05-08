@@ -15,7 +15,7 @@ const fs = require('fs')
 const extractLESS = new ExtractTextPlugin({filename: path.join('css', 'goldenlayout.css')})
 const extractStyles = new ExtractTextPlugin({ filename: path.join('css', 'goldenlayout.css') })
 
-console.log('process.env', process.env.ZEPTO)
+console.log('ES6?', process.env.ES6)
 
 var compileHooksIsRunning = false
 var data = { files: [], directories: [] }
@@ -63,11 +63,13 @@ module.exports = (env) => {
 
     watch: env.dev || env.build_watch,
 
-    devtool: 'cheap-module-source-map',
+    devtool: 'eval',
 
     devServer: {
       contentBase: path.join(__dirname, "dist"),
       watchContentBase: true,
+      host: '127.0.0.1',
+      port: '1234'
     },
 
     module: {
@@ -265,13 +267,13 @@ module.exports = (env) => {
       extractStyles,
       extractLESS,
 
-      new StyleLintPlugin({
-        configFile: '.stylelintrc',
-        context: path.join('src', stylesType),
-        files: '**/*' + stylesExtension,
-        failOnError: false,
-        quiet: true,
-      }),
+      // new StyleLintPlugin({
+        // configFile: '.stylelintrc',
+        // context: path.join('src', stylesType),
+        // files: '**/*' + stylesExtension,
+        // failOnError: false,
+        // quiet: true,
+      // }),
     ].concat(env.dev ? [
 
       new HtmlWebpackPlugin({
@@ -280,17 +282,6 @@ module.exports = (env) => {
       }),
 
       new MinifyPlugin,
-
-      new BrowserSyncPlugin({
-        files: "dist/**/*.*",
-        hostname: "localhost",
-        port: 8080,
-        server: { baseDir: ['dist'] },
-        reloadDelay: 50,
-        injectChanges: false,
-        reloadDebounce: 500,
-        reloadOnRestart: true,
-      }),
 
     ] : [])),
   }
